@@ -4,6 +4,14 @@ export const CONTACT = {
   phoneDisplay: "(979) 635-2045",
   phoneE164: "19796352045",
   hours: "9:00 a.m. – 5:00 p.m.",
+  responseNote: "Usually replies within a few hours during 9:00 a.m. – 5:00 p.m.",
+  pickup: {
+    city: "College Station, TX",
+    address: "601 Luther Street West",
+    note: "Pickup only at my place — I cannot deliver. Buyer comes to pick up.",
+  },
+  conditionNote:
+    "Almost like new — first-hand used (not brand new unless marked Brand new).",
 } as const;
 
 export function whatsappUrl(message: string) {
@@ -15,7 +23,12 @@ export function productWhatsAppMessage(product: {
   price: number;
   giveaway?: boolean;
   negotiable: boolean;
+  sold?: boolean;
 }) {
+  if (product.sold) {
+    return `Hey ${CONTACT.firstName}, I saw "${product.title}" marked sold — do you have anything similar available?`;
+  }
+
   if (product.giveaway || product.price === 0) {
     return `Hey ${CONTACT.firstName}, I'm interested in the giveaway item "${product.title}". Is it still available?`;
   }

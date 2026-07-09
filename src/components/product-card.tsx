@@ -1,24 +1,48 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { formatPrice, type Product } from "@/lib/products";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <Link href={`/product/${product.id}`} className="group block h-full">
+    <Link
+      href={`/product/${product.id}`}
+      className="group block h-full"
+      onContextMenu={(event) => event.preventDefault()}
+      onDragStart={(event) => event.preventDefault()}
+    >
       <Card className="h-full overflow-hidden py-0 transition-shadow group-hover:shadow-md">
-        <div className="relative aspect-square bg-muted">
+        <div
+          className={cn(
+            "relative aspect-square bg-muted select-none",
+            product.sold && "opacity-55"
+          )}
+        >
           <Image
             src={product.images[0]}
             alt={product.title}
             fill
-            className="object-contain p-0.5 transition-transform duration-300 group-hover:scale-[1.02] sm:p-1"
+            draggable={false}
+            className="pointer-events-none object-contain p-0.5 transition-transform duration-300 group-hover:scale-[1.02] select-none sm:p-1"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
+          {product.sold && (
+            <div className="absolute inset-x-0 bottom-0 bg-black/70 px-2 py-1 text-center text-xs font-semibold text-white">
+              SOLD
+            </div>
+          )}
         </div>
         <CardContent className="space-y-1.5 p-2 sm:space-y-2 sm:p-3 lg:p-4">
           <div className="flex flex-wrap gap-1">
+            {product.sold && (
+              <Badge variant="destructive" className="text-[10px] sm:text-xs">
+                Sold
+              </Badge>
+            )}
             {product.giveaway && (
               <Badge variant="secondary" className="text-[10px] sm:text-xs">
                 Giveaway
@@ -35,6 +59,7 @@ export function ProductCard({ product }: { product: Product }) {
               </Badge>
             )}
             {!product.giveaway &&
+              !product.sold &&
               (product.negotiable ? (
                 <Badge variant="outline" className="text-[10px] sm:text-xs">
                   Negotiable

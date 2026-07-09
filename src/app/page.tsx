@@ -1,5 +1,6 @@
 import { ProductGrid } from "@/components/product-grid";
 import { SiteHeader } from "@/components/site-header";
+import { CONTACT } from "@/lib/contact";
 import { products } from "@/lib/products";
 
 export default function HomePage() {
@@ -13,7 +14,11 @@ export default function HomePage() {
           </h1>
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base lg:text-lg">
             Browse photos, check the price, then message me on WhatsApp.{" "}
-            {products.length} items listed.
+            Pickup only in {CONTACT.pickup.city} ({CONTACT.pickup.address}) —
+            come pick up at my place. {products.length} items listed.
+          </p>
+          <p className="text-sm text-muted-foreground sm:text-base">
+            {CONTACT.responseNote}
           </p>
         </div>
         <ProductGrid />

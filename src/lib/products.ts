@@ -1,5 +1,10 @@
 export type GalleryAspect = "square" | "portrait" | "landscape" | "tall";
 
+export type MediaItem = {
+  type: "image" | "video";
+  src: string;
+};
+
 export type Product = {
   id: string;
   title: string;
@@ -12,9 +17,13 @@ export type Product = {
   combo?: boolean;
   giveaway?: boolean;
   brandNew?: boolean;
+  sold?: boolean;
   galleryAspect: GalleryAspect;
   images: string[];
+  /** Optional videos shown in the gallery (drop files under public/products/...). */
+  videos?: string[];
 };
+
 
 const aspectClass: Record<GalleryAspect, string> = {
   square: "aspect-square",
@@ -67,8 +76,10 @@ export const products: Product[] = [
     category: "Furniture",
     negotiable: false,
     galleryAspect: "portrait",
+    videos: ["/products/chair/chair-video.mp4"],
     images: [
       "/products/chair/chair-01.jpeg",
+      "/products/chair/chair-07.jpeg",
       "/products/chair/chair-04.jpeg",
       "/products/chair/chair-05.jpeg",
       "/products/chair/chair-06.jpeg",
@@ -90,9 +101,11 @@ export const products: Product[] = [
     negotiable: true,
     combo: true,
     galleryAspect: "portrait",
+    videos: ["/products/chair/chair-video.mp4"],
     images: [
       "/products/chair/chair-02.jpeg",
       "/products/chair/chair-03.jpeg",
+      "/products/chair/chair-07.jpeg",
       "/products/chair/chair-01.jpeg",
       "/products/back-rest-cushion/back-rest-cushion-01.jpeg",
       "/products/back-rest-cushion/back-rest-cushion-04.jpeg",
@@ -160,11 +173,13 @@ export const products: Product[] = [
     category: "Electronics",
     negotiable: false,
     galleryAspect: "landscape",
+    videos: ["/products/desktop/desktop-video.mp4"],
     images: [
       "/products/desktop/desktop-01.jpeg",
       "/products/desktop/desktop-02.jpeg",
       "/products/desktop/desktop-03.jpeg",
       "/products/desktop/desktop-04.jpeg",
+      "/products/desktop/desktop-05.jpeg",
     ],
   },
   {
@@ -619,11 +634,72 @@ export function getProduct(id: string) {
 
 export function getRelatedProducts(product: Product, limit = 4) {
   return products
-    .filter((p) => p.id !== product.id && p.category === product.category)
+    .filter(
+      (p) =>
+        p.id !== product.id &&
+        p.category === product.category &&
+        !p.sold
+    )
     .slice(0, limit);
 }
 
+/** Explicit combo upsells shown on product pages. */
+export const BUNDLE_PROMPTS: Record<
+  string,
+  { targetId: string; headline: string; body: string }
+> = {
+  chair: {
+    targetId: "chair-combo",
+    headline: "Save with the chair combo",
+    body: "Chair + lumbar + seat cushion for $30 (vs chair alone at $25).",
+  },
+  "chair-combo": {
+    targetId: "chair",
+    headline: "Just need the chair?",
+    body: "Chair alone is listed at $25 (firm).",
+  },
+  "graduation-gown": {
+    targetId: "graduation-set",
+    headline: "Add A&M swag for $10 more",
+    body: "Gown set + A&M sun/swag cap + poncho for $80.",
+  },
+  "graduation-set": {
+    targetId: "graduation-gown",
+    headline: "Gown set without swag",
+    body: "Cap, gown, hood, and tassel alone for $70.",
+  },
+  keyboard: {
+    targetId: "keyboard-mouse-combo",
+    headline: "Keyboard + mouse + mat combo",
+    body: "Full set for $20 (pieces alone add up to $24).",
+  },
+  mouse: {
+    targetId: "keyboard-mouse-combo",
+    headline: "Get the full desk set",
+    body: "Keyboard + mouse + mat combo for $20.",
+  },
+  "keyboard-mat": {
+    targetId: "keyboard-mouse-combo",
+    headline: "Included in the $20 combo",
+    body: "Keyboard + mouse + mat together for $20.",
+  },
+  "keyboard-mouse-combo": {
+    targetId: "keyboard",
+    headline: "Prefer pieces separately?",
+    body: "Keyboard $18 · Mouse $5 · Mat $1 also listed alone.",
+  },
+};
+
+export function getBundlePrompt(productId: string) {
+  const prompt = BUNDLE_PROMPTS[productId];
+  if (!prompt) return null;
+  const target = getProduct(prompt.targetId);
+  if (!target || target.sold) return null;
+  return { ...prompt, target };
+}
+
 export function formatPrice(product: Product) {
+  if (product.sold) return "Sold";
   if (product.giveaway || product.price === 0) return "Giveaway";
   const base = `$${product.price}`;
   if (product.priceNote) return `${base} ${product.priceNote}`;
