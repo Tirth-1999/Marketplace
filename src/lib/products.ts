@@ -15,6 +15,8 @@ export type Product = {
   category: string;
   negotiable: boolean;
   combo?: boolean;
+  /** Product IDs included in this combo — combo is unavailable if any are sold/reserved. */
+  includes?: string[];
   giveaway?: boolean;
   brandNew?: boolean;
   sold?: boolean;
@@ -103,6 +105,7 @@ export const products: Product[] = [
     category: "Furniture",
     negotiable: true,
     combo: true,
+    includes: ["chair", "back-rest-cushion"],
     galleryAspect: "portrait",
     videos: ["/products/chair/chair-video.mp4"],
     images: [
@@ -152,6 +155,7 @@ export const products: Product[] = [
     category: "Graduation",
     negotiable: true,
     combo: true,
+    includes: ["graduation-gown"],
     galleryAspect: "portrait",
     images: [
       "/products/graduation-set/graduation-set-01.jpeg",
@@ -230,6 +234,7 @@ export const products: Product[] = [
     category: "Electronics",
     negotiable: true,
     combo: true,
+    includes: ["keyboard", "mouse", "keyboard-mat"],
     galleryAspect: "landscape",
     images: [
       "/products/keyboard-mouse-combo/keyboard-mouse-combo-01.jpeg",
@@ -640,14 +645,38 @@ export function getProduct(id: string) {
   return products.find((p) => p.id === id);
 }
 
+export function isSold(product: Product): boolean {
+  if (product.sold) return true;
+  if (product.includes?.length) {
+    return product.includes.some((id) => {
+      const item = getProduct(id);
+      return item ? isSold(item) : false;
+    });
+  }
+  return false;
+}
+
+export function isReserved(product: Product): boolean {
+  if (isSold(product)) return false;
+  if (product.reserved) return true;
+  if (product.includes?.length) {
+    return product.includes.some((id) => {
+      const item = getProduct(id);
+      if (!item) return false;
+      return isSold(item) || isReserved(item);
+    });
+  }
+  return false;
+}
+
 export function getRelatedProducts(product: Product, limit = 4) {
   return products
     .filter(
       (p) =>
         p.id !== product.id &&
         p.category === product.category &&
-        !p.sold &&
-        !p.reserved
+        !isSold(p) &&
+        !isReserved(p)
     )
     .slice(0, limit);
 }
@@ -703,14 +732,14 @@ export function getBundlePrompt(productId: string) {
   const prompt = BUNDLE_PROMPTS[productId];
   if (!prompt) return null;
   const target = getProduct(prompt.targetId);
-  if (!target || target.sold || target.reserved) return null;
+  if (!target || isSold(target) || isReserved(target)) return null;
   return { ...prompt, target };
 }
 
 export function formatPrice(product: Product) {
-  if (product.sold && product.giveaway) return "Claimed";
-  if (product.sold) return "Sold";
-  if (product.reserved) {
+  if (isSold(product) && product.giveaway) return "Claimed";
+  if (isSold(product)) return "Sold";
+  if (isReserved(product)) {
     const base = `$${product.price}`;
     return product.priceNote ? `${base} ${product.priceNote}` : base;
   }

@@ -1,3 +1,5 @@
+import { isReserved, isSold, type Product } from "@/lib/products";
+
 export const CONTACT = {
   name: "Tirth C Shah",
   firstName: "Tirth",
@@ -18,19 +20,12 @@ export function whatsappUrl(message: string) {
   return `https://wa.me/${CONTACT.phoneE164}?text=${encodeURIComponent(message)}`;
 }
 
-export function productWhatsAppMessage(product: {
-  title: string;
-  price: number;
-  giveaway?: boolean;
-  negotiable: boolean;
-  sold?: boolean;
-  reserved?: boolean;
-}) {
-  if (product.sold) {
+export function productWhatsAppMessage(product: Product) {
+  if (isSold(product)) {
     return `Hey ${CONTACT.firstName}, I saw "${product.title}" marked sold — do you have anything similar available?`;
   }
 
-  if (product.reserved) {
+  if (isReserved(product)) {
     return `Hey ${CONTACT.firstName}, I saw "${product.title}" is reserved — if it opens up, please let me know.`;
   }
 

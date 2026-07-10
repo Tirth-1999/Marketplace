@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CONTACT, productWhatsAppMessage, whatsappUrl } from "@/lib/contact";
 import { getExistingProductMedia } from "@/lib/product-media";
-import { formatPrice, getProduct, products } from "@/lib/products";
+import { formatPrice, getProduct, isReserved, isSold, products } from "@/lib/products";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -39,6 +39,8 @@ export default async function ProductPage({ params }: PageProps) {
 
   const message = productWhatsAppMessage(product);
   const media = getExistingProductMedia(product);
+  const sold = isSold(product);
+  const reserved = isReserved(product);
 
   return (
     <>
@@ -59,19 +61,19 @@ export default async function ProductPage({ params }: PageProps) {
             media={media}
             title={product.title}
             aspect={product.galleryAspect}
-            sold={product.sold}
-            reserved={product.reserved}
+            sold={sold}
+            reserved={reserved}
           />
 
           <div className="space-y-4 sm:space-y-5 md:space-y-6">
             <div className="space-y-3 sm:space-y-4">
               <div className="flex flex-wrap gap-2">
-                {product.sold && (
+                {sold && (
                   <Badge variant="destructive" className="px-2.5 py-1 text-xs sm:text-sm">
                     {product.giveaway ? "Claimed" : "Sold / Unavailable"}
                   </Badge>
                 )}
-                {product.reserved && !product.sold && (
+                {reserved && !sold && (
                   <Badge className="bg-amber-600 px-2.5 py-1 text-xs text-white hover:bg-amber-600 sm:text-sm">
                     Reserved
                   </Badge>
@@ -89,15 +91,15 @@ export default async function ProductPage({ params }: PageProps) {
                     Brand new
                   </Badge>
                 )}
-                {product.giveaway && !product.sold ? (
+                {product.giveaway && !sold ? (
                   <Badge variant="secondary" className="px-2.5 py-1 text-xs sm:text-sm">
                     Giveaway
                   </Badge>
-                ) : !product.sold && !product.reserved && product.negotiable ? (
+                ) : !sold && !reserved && product.negotiable ? (
                   <Badge variant="outline" className="px-2.5 py-1 text-xs sm:text-sm">
                     Negotiable
                   </Badge>
-                ) : !product.sold && !product.reserved ? (
+                ) : !sold && !reserved ? (
                   <Badge variant="destructive" className="px-2.5 py-1 text-xs sm:text-sm">
                     Non-negotiable
                   </Badge>
@@ -109,14 +111,16 @@ export default async function ProductPage({ params }: PageProps) {
               <p className="text-3xl font-bold tabular-nums sm:text-4xl lg:text-5xl">
                 {formatPrice(product)}
               </p>
-              {product.sold && (
+              {sold && (
                 <p className="text-sm font-medium text-muted-foreground sm:text-base">
                   {product.giveaway
                     ? "This giveaway has been claimed and is no longer available."
-                    : "This item is sold and no longer available."}
+                    : product.combo && !product.sold
+                      ? "One or more items in this combo are no longer available."
+                      : "This item is sold and no longer available."}
                 </p>
               )}
-              {product.reserved && !product.sold && (
+              {reserved && !sold && (
                 <p className="text-sm font-medium text-amber-700 sm:text-base">
                   This item is reserved for another buyer.
                 </p>
@@ -177,7 +181,7 @@ export default async function ProductPage({ params }: PageProps) {
                 {CONTACT.responseNote}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                {!product.sold && !product.reserved && (
+                {!sold && !reserved && (
                   <Button
                     className="h-11 min-h-11 flex-1 bg-[#25D366] text-base text-white hover:bg-[#1ebe57] hover:text-white"
                     render={
@@ -193,7 +197,7 @@ export default async function ProductPage({ params }: PageProps) {
                     WhatsApp about this item
                   </Button>
                 )}
-                {(product.sold || product.reserved) && (
+                {(sold || reserved) && (
                   <Button
                     className="h-11 min-h-11 flex-1 bg-[#25D366] text-base text-white hover:bg-[#1ebe57] hover:text-white"
                     render={
@@ -206,7 +210,7 @@ export default async function ProductPage({ params }: PageProps) {
                     nativeButton={false}
                   >
                     <WhatsAppIcon className="size-5" />
-                    {product.sold ? "Ask about similar" : "Ask if it opens up"}
+                    {sold ? "Ask about similar" : "Ask if it opens up"}
                   </Button>
                 )}
                 <Button
@@ -241,9 +245,9 @@ export default async function ProductPage({ params }: PageProps) {
             nativeButton={false}
           >
             <WhatsAppIcon className="size-5" />
-            {product.sold
+            {sold
               ? "Ask similar"
-              : product.reserved
+              : reserved
                 ? "Ask if open"
                 : "WhatsApp"}
           </Button>

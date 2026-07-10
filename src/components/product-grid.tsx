@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { categories, products, type Product } from "@/lib/products";
+import { categories, isReserved, isSold, products, type Product } from "@/lib/products";
 
 type SortOption =
   | "featured"
@@ -60,61 +60,74 @@ const QUICK_FILTERS: { value: QuickFilter; label: string }[] = [
 ];
 
 function matchesQuickFilter(product: Product, filter: QuickFilter) {
+  const sold = isSold(product);
+  const reserved = isReserved(product);
+
   switch (filter) {
     case "available":
-      return !product.sold && !product.reserved;
+      return !sold && !reserved;
     case "reserved":
-      return Boolean(product.reserved) && !product.sold;
+      return reserved && !sold;
     case "sold":
-      return Boolean(product.sold);
+      return sold;
     case "firm":
       return (
         !product.negotiable &&
         !product.giveaway &&
-        !product.sold &&
-        !product.reserved
+        !sold &&
+        !reserved
       );
     case "negotiable":
       return (
         product.negotiable &&
         !product.giveaway &&
-        !product.sold &&
-        !product.reserved
+        !sold &&
+        !reserved
       );
     case "brand-new":
       return Boolean(product.brandNew);
     case "combo":
       return Boolean(product.combo);
     case "giveaway":
-      return Boolean(product.giveaway) && !product.sold;
+      return Boolean(product.giveaway) && !sold;
     default:
       return true;
   }
 }
 
+function availabilityRank(product: Product): number {
+  return isSold(product) ? 1 : 0;
+}
+
 function sortProducts(list: Product[], sort: SortOption) {
   const next = [...list];
 
-  switch (sort) {
-    case "price-asc":
-      return next.sort((a, b) => a.price - b.price);
-    case "price-desc":
-      return next.sort((a, b) => b.price - a.price);
-    case "firm-first":
-      return next.sort((a, b) => Number(a.negotiable) - Number(b.negotiable));
-    case "negotiable-first":
-      return next.sort((a, b) => Number(b.negotiable) - Number(a.negotiable));
-    case "brand-new":
-      return next.sort(
-        (a, b) => Number(Boolean(b.brandNew)) - Number(Boolean(a.brandNew))
-      );
-    case "combos":
-      return next.sort(
-        (a, b) => Number(Boolean(b.combo)) - Number(Boolean(a.combo))
-      );
-    default:
-      return next;
-  }
+  const comparePrimary = (a: Product, b: Product): number => {
+    switch (sort) {
+      case "price-asc":
+        return a.price - b.price;
+      case "price-desc":
+        return b.price - a.price;
+      case "firm-first":
+        return Number(a.negotiable) - Number(b.negotiable);
+      case "negotiable-first":
+        return Number(b.negotiable) - Number(a.negotiable);
+      case "brand-new":
+        return (
+          Number(Boolean(b.brandNew)) - Number(Boolean(a.brandNew))
+        );
+      case "combos":
+        return Number(Boolean(b.combo)) - Number(Boolean(a.combo));
+      default:
+        return 0;
+    }
+  };
+
+  return next.sort((a, b) => {
+    const availability = availabilityRank(a) - availabilityRank(b);
+    if (availability !== 0) return availability;
+    return comparePrimary(a, b);
+  });
 }
 
 function FilterPanel({
