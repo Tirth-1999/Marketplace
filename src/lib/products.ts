@@ -624,6 +624,7 @@ export const products: Product[] = [
     specs: ["$2 per notebook", "Negotiable", "Blue and green covers available"],
     category: "Stationery",
     negotiable: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/notebooks/notebooks-01.jpeg",
