@@ -59,6 +59,8 @@ export default async function ProductPage({ params }: PageProps) {
             media={media}
             title={product.title}
             aspect={product.galleryAspect}
+            sold={product.sold}
+            reserved={product.reserved}
           />
 
           <div className="space-y-4 sm:space-y-5 md:space-y-6">
@@ -66,7 +68,12 @@ export default async function ProductPage({ params }: PageProps) {
               <div className="flex flex-wrap gap-2">
                 {product.sold && (
                   <Badge variant="destructive" className="px-2.5 py-1 text-xs sm:text-sm">
-                    Sold
+                    Sold / Unavailable
+                  </Badge>
+                )}
+                {product.reserved && !product.sold && (
+                  <Badge className="bg-amber-600 px-2.5 py-1 text-xs text-white hover:bg-amber-600 sm:text-sm">
+                    Reserved
                   </Badge>
                 )}
                 <Badge variant="secondary" className="px-2.5 py-1 text-xs sm:text-sm">
@@ -86,11 +93,11 @@ export default async function ProductPage({ params }: PageProps) {
                   <Badge variant="secondary" className="px-2.5 py-1 text-xs sm:text-sm">
                     Giveaway
                   </Badge>
-                ) : !product.sold && product.negotiable ? (
+                ) : !product.sold && !product.reserved && product.negotiable ? (
                   <Badge variant="outline" className="px-2.5 py-1 text-xs sm:text-sm">
                     Negotiable
                   </Badge>
-                ) : !product.sold ? (
+                ) : !product.sold && !product.reserved ? (
                   <Badge variant="destructive" className="px-2.5 py-1 text-xs sm:text-sm">
                     Non-negotiable
                   </Badge>
@@ -102,6 +109,16 @@ export default async function ProductPage({ params }: PageProps) {
               <p className="text-3xl font-bold tabular-nums sm:text-4xl lg:text-5xl">
                 {formatPrice(product)}
               </p>
+              {product.sold && (
+                <p className="text-sm font-medium text-muted-foreground sm:text-base">
+                  This item is sold and no longer available.
+                </p>
+              )}
+              {product.reserved && !product.sold && (
+                <p className="text-sm font-medium text-amber-700 sm:text-base">
+                  This item is reserved for another buyer.
+                </p>
+              )}
             </div>
 
             <Separator />
@@ -158,7 +175,7 @@ export default async function ProductPage({ params }: PageProps) {
                 {CONTACT.responseNote}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                {!product.sold && (
+                {!product.sold && !product.reserved && (
                   <Button
                     className="h-11 min-h-11 flex-1 bg-[#25D366] text-base text-white hover:bg-[#1ebe57] hover:text-white"
                     render={
@@ -172,6 +189,22 @@ export default async function ProductPage({ params }: PageProps) {
                   >
                     <WhatsAppIcon className="size-5" />
                     WhatsApp about this item
+                  </Button>
+                )}
+                {(product.sold || product.reserved) && (
+                  <Button
+                    className="h-11 min-h-11 flex-1 bg-[#25D366] text-base text-white hover:bg-[#1ebe57] hover:text-white"
+                    render={
+                      <a
+                        href={whatsappUrl(message)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    }
+                    nativeButton={false}
+                  >
+                    <WhatsAppIcon className="size-5" />
+                    {product.sold ? "Ask about similar" : "Ask if it opens up"}
                   </Button>
                 )}
                 <Button
@@ -194,37 +227,24 @@ export default async function ProductPage({ params }: PageProps) {
 
       <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
         <div className="mx-auto flex max-w-6xl gap-2">
-          {!product.sold ? (
-            <Button
-              className="h-11 min-h-11 flex-1 bg-[#25D366] text-sm text-white hover:bg-[#1ebe57] hover:text-white sm:text-base"
-              render={
-                <a
-                  href={whatsappUrl(message)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              }
-              nativeButton={false}
-            >
-              <WhatsAppIcon className="size-5" />
-              WhatsApp
-            </Button>
-          ) : (
-            <Button
-              className="h-11 min-h-11 flex-1 bg-[#25D366] text-sm text-white hover:bg-[#1ebe57] hover:text-white sm:text-base"
-              render={
-                <a
-                  href={whatsappUrl(message)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              }
-              nativeButton={false}
-            >
-              <WhatsAppIcon className="size-5" />
-              Ask similar
-            </Button>
-          )}
+          <Button
+            className="h-11 min-h-11 flex-1 bg-[#25D366] text-sm text-white hover:bg-[#1ebe57] hover:text-white sm:text-base"
+            render={
+              <a
+                href={whatsappUrl(message)}
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            }
+            nativeButton={false}
+          >
+            <WhatsAppIcon className="size-5" />
+            {product.sold
+              ? "Ask similar"
+              : product.reserved
+                ? "Ask if open"
+                : "WhatsApp"}
+          </Button>
           <ShareButton title={product.title} className="h-11 min-h-11 px-3" />
           <Button
             variant="outline"

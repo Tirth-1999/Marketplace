@@ -18,6 +18,7 @@ export type Product = {
   giveaway?: boolean;
   brandNew?: boolean;
   sold?: boolean;
+  reserved?: boolean;
   galleryAspect: GalleryAspect;
   images: string[];
   /** Optional videos shown in the gallery (drop files under public/products/...). */
@@ -53,6 +54,7 @@ export const products: Product[] = [
     ],
     category: "Transport",
     negotiable: true,
+    reserved: true,
     galleryAspect: "tall",
     images: [
       "/products/scooter/scooter-01.jpeg",
@@ -404,6 +406,7 @@ export const products: Product[] = [
     ],
     category: "Furniture",
     negotiable: true,
+    reserved: true,
     galleryAspect: "square",
     images: [
       "/products/back-rest-cushion/back-rest-cushion-01.jpeg",
@@ -490,6 +493,7 @@ export const products: Product[] = [
     ],
     category: "Fitness",
     negotiable: false,
+    sold: true,
     galleryAspect: "landscape",
     images: ["/products/resistance-bands/resistance-bands-01.jpeg"],
   },
@@ -506,6 +510,7 @@ export const products: Product[] = [
     ],
     category: "Fitness",
     negotiable: true,
+    reserved: true,
     galleryAspect: "square",
     images: [
       "/products/hand-gripper/hand-gripper-01.jpeg",
@@ -638,7 +643,8 @@ export function getRelatedProducts(product: Product, limit = 4) {
       (p) =>
         p.id !== product.id &&
         p.category === product.category &&
-        !p.sold
+        !p.sold &&
+        !p.reserved
     )
     .slice(0, limit);
 }
@@ -694,12 +700,16 @@ export function getBundlePrompt(productId: string) {
   const prompt = BUNDLE_PROMPTS[productId];
   if (!prompt) return null;
   const target = getProduct(prompt.targetId);
-  if (!target || target.sold) return null;
+  if (!target || target.sold || target.reserved) return null;
   return { ...prompt, target };
 }
 
 export function formatPrice(product: Product) {
   if (product.sold) return "Sold";
+  if (product.reserved) {
+    const base = `$${product.price}`;
+    return product.priceNote ? `${base} ${product.priceNote}` : base;
+  }
   if (product.giveaway || product.price === 0) return "Giveaway";
   const base = `$${product.price}`;
   if (product.priceNote) return `${base} ${product.priceNote}`;

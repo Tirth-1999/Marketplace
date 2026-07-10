@@ -128,3 +128,23 @@
     @apply font-sans;
   }
 }
+
+@keyframes sold-pulse {
+  0%,
+  100% {
+    opacity: 0.88;
+    transform: scale(1) rotate(-8deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03) rotate(-8deg);
+  }
+}
+
+.sold-stamp {
+  animation: sold-pulse 2.4s ease-in-out infinite;
+}
+
+.sold-unavailable img {
+  filter: grayscale(1) contrast(0.85) brightness(0.9);
+}

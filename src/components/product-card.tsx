@@ -19,7 +19,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div
           className={cn(
             "relative aspect-square bg-muted select-none",
-            product.sold && "opacity-55"
+            product.sold && "sold-unavailable"
           )}
         >
           <Image
@@ -27,12 +27,24 @@ export function ProductCard({ product }: { product: Product }) {
             alt={product.title}
             fill
             draggable={false}
-            className="pointer-events-none object-contain p-0.5 transition-transform duration-300 group-hover:scale-[1.02] select-none sm:p-1"
+            className={cn(
+              "pointer-events-none object-contain p-0.5 transition-transform duration-300 select-none sm:p-1",
+              product.sold
+                ? "grayscale contrast-75 brightness-90"
+                : "group-hover:scale-[1.02]"
+            )}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
           {product.sold && (
-            <div className="absolute inset-x-0 bottom-0 bg-black/70 px-2 py-1 text-center text-xs font-semibold text-white">
-              SOLD
+            <div className="absolute inset-0 flex items-center justify-center bg-black/35">
+              <div className="sold-stamp rotate-[-8deg] rounded-md border-2 border-white/80 px-3 py-1.5 text-center text-sm font-bold tracking-wide text-white uppercase shadow-sm sm:text-base">
+                Unavailable
+              </div>
+            </div>
+          )}
+          {product.reserved && !product.sold && (
+            <div className="absolute inset-x-0 bottom-0 bg-amber-600/90 px-2 py-1 text-center text-xs font-semibold text-white">
+              RESERVED
             </div>
           )}
         </div>
@@ -41,6 +53,11 @@ export function ProductCard({ product }: { product: Product }) {
             {product.sold && (
               <Badge variant="destructive" className="text-[10px] sm:text-xs">
                 Sold
+              </Badge>
+            )}
+            {product.reserved && !product.sold && (
+              <Badge className="bg-amber-600 text-[10px] text-white hover:bg-amber-600 sm:text-xs">
+                Reserved
               </Badge>
             )}
             {product.giveaway && (
@@ -60,6 +77,7 @@ export function ProductCard({ product }: { product: Product }) {
             )}
             {!product.giveaway &&
               !product.sold &&
+              !product.reserved &&
               (product.negotiable ? (
                 <Badge variant="outline" className="text-[10px] sm:text-xs">
                   Negotiable

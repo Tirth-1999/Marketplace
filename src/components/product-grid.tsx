@@ -29,6 +29,7 @@ type SortOption =
 type QuickFilter =
   | "all"
   | "available"
+  | "reserved"
   | "sold"
   | "firm"
   | "negotiable"
@@ -49,6 +50,7 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 const QUICK_FILTERS: { value: QuickFilter; label: string }[] = [
   { value: "all", label: "All deals" },
   { value: "available", label: "Available" },
+  { value: "reserved", label: "Reserved" },
   { value: "sold", label: "Sold" },
   { value: "firm", label: "Firm" },
   { value: "negotiable", label: "Negotiable" },
@@ -60,13 +62,25 @@ const QUICK_FILTERS: { value: QuickFilter; label: string }[] = [
 function matchesQuickFilter(product: Product, filter: QuickFilter) {
   switch (filter) {
     case "available":
-      return !product.sold;
+      return !product.sold && !product.reserved;
+    case "reserved":
+      return Boolean(product.reserved) && !product.sold;
     case "sold":
       return Boolean(product.sold);
     case "firm":
-      return !product.negotiable && !product.giveaway && !product.sold;
+      return (
+        !product.negotiable &&
+        !product.giveaway &&
+        !product.sold &&
+        !product.reserved
+      );
     case "negotiable":
-      return product.negotiable && !product.giveaway && !product.sold;
+      return (
+        product.negotiable &&
+        !product.giveaway &&
+        !product.sold &&
+        !product.reserved
+      );
     case "brand-new":
       return Boolean(product.brandNew);
     case "combo":

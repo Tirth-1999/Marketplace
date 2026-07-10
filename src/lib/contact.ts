@@ -24,9 +24,14 @@ export function productWhatsAppMessage(product: {
   giveaway?: boolean;
   negotiable: boolean;
   sold?: boolean;
+  reserved?: boolean;
 }) {
   if (product.sold) {
     return `Hey ${CONTACT.firstName}, I saw "${product.title}" marked sold — do you have anything similar available?`;
+  }
+
+  if (product.reserved) {
+    return `Hey ${CONTACT.firstName}, I saw "${product.title}" is reserved — if it opens up, please let me know.`;
   }
 
   if (product.giveaway || product.price === 0) {

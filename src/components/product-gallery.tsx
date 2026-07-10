@@ -14,9 +14,17 @@ type ProductGalleryProps = {
   media: MediaItem[];
   title: string;
   aspect: GalleryAspect;
+  sold?: boolean;
+  reserved?: boolean;
 };
 
-export function ProductGallery({ media, title, aspect }: ProductGalleryProps) {
+export function ProductGallery({
+  media,
+  title,
+  aspect,
+  sold,
+  reserved,
+}: ProductGalleryProps) {
   const [active, setActive] = useState(0);
   const current = media[active] ?? media[0];
 
@@ -33,18 +41,22 @@ export function ProductGallery({ media, title, aspect }: ProductGalleryProps) {
           "relative w-full overflow-hidden rounded-xl bg-muted",
           "max-h-[42vh]",
           "md:max-h-[min(28rem,55vh)] lg:max-h-[min(32rem,60vh)]",
-          galleryAspectClass(aspect)
+          galleryAspectClass(aspect),
+          sold && "sold-unavailable"
         )}
       >
         {current.type === "video" ? (
           <video
             key={current.src}
             src={current.src}
-            controls
+            controls={!sold}
             playsInline
             controlsList="nodownload"
             disablePictureInPicture
-            className="absolute inset-0 h-full w-full object-contain"
+            className={cn(
+              "absolute inset-0 h-full w-full object-contain",
+              sold && "grayscale contrast-75 brightness-90"
+            )}
             onContextMenu={(event) => event.preventDefault()}
           />
         ) : (
@@ -53,10 +65,25 @@ export function ProductGallery({ media, title, aspect }: ProductGalleryProps) {
             alt={`${title} — photo ${active + 1}`}
             fill
             draggable={false}
-            className="pointer-events-none object-contain p-2 select-none"
+            className={cn(
+              "pointer-events-none object-contain p-2 select-none",
+              sold && "grayscale contrast-75 brightness-90"
+            )}
             sizes="(max-width: 767px) 100vw, 50vw"
             priority
           />
+        )}
+        {sold && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/35">
+            <div className="sold-stamp rotate-[-8deg] rounded-md border-2 border-white/80 px-4 py-2 text-center text-lg font-bold tracking-wide text-white uppercase shadow-sm sm:text-xl">
+              Unavailable
+            </div>
+          </div>
+        )}
+        {reserved && !sold && (
+          <div className="absolute inset-x-0 bottom-0 bg-amber-600/90 px-3 py-2 text-center text-sm font-semibold text-white">
+            RESERVED
+          </div>
         )}
       </div>
 
