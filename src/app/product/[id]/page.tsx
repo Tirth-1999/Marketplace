@@ -68,7 +68,7 @@ export default async function ProductPage({ params }: PageProps) {
               <div className="flex flex-wrap gap-2">
                 {product.sold && (
                   <Badge variant="destructive" className="px-2.5 py-1 text-xs sm:text-sm">
-                    Sold / Unavailable
+                    {product.giveaway ? "Claimed" : "Sold / Unavailable"}
                   </Badge>
                 )}
                 {product.reserved && !product.sold && (
@@ -89,7 +89,7 @@ export default async function ProductPage({ params }: PageProps) {
                     Brand new
                   </Badge>
                 )}
-                {product.giveaway ? (
+                {product.giveaway && !product.sold ? (
                   <Badge variant="secondary" className="px-2.5 py-1 text-xs sm:text-sm">
                     Giveaway
                   </Badge>
@@ -111,7 +111,9 @@ export default async function ProductPage({ params }: PageProps) {
               </p>
               {product.sold && (
                 <p className="text-sm font-medium text-muted-foreground sm:text-base">
-                  This item is sold and no longer available.
+                  {product.giveaway
+                    ? "This giveaway has been claimed and is no longer available."
+                    : "This item is sold and no longer available."}
                 </p>
               )}
               {product.reserved && !product.sold && (

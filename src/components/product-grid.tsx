@@ -86,7 +86,7 @@ function matchesQuickFilter(product: Product, filter: QuickFilter) {
     case "combo":
       return Boolean(product.combo);
     case "giveaway":
-      return Boolean(product.giveaway);
+      return Boolean(product.giveaway) && !product.sold;
     default:
       return true;
   }

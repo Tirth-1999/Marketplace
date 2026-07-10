@@ -54,7 +54,7 @@ export const products: Product[] = [
     ],
     category: "Transport",
     negotiable: true,
-    reserved: true,
+    sold: true,
     galleryAspect: "tall",
     images: [
       "/products/scooter/scooter-01.jpeg",
@@ -77,6 +77,7 @@ export const products: Product[] = [
     ],
     category: "Furniture",
     negotiable: false,
+    sold: true,
     galleryAspect: "portrait",
     videos: ["/products/chair/chair-video.mp4"],
     images: [
@@ -406,7 +407,7 @@ export const products: Product[] = [
     ],
     category: "Furniture",
     negotiable: true,
-    reserved: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/back-rest-cushion/back-rest-cushion-01.jpeg",
@@ -458,6 +459,7 @@ export const products: Product[] = [
     category: "Home",
     negotiable: false,
     giveaway: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/bidet/bidet-01.jpeg",
@@ -510,7 +512,7 @@ export const products: Product[] = [
     ],
     category: "Fitness",
     negotiable: true,
-    reserved: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/hand-gripper/hand-gripper-01.jpeg",
@@ -706,6 +708,7 @@ export function getBundlePrompt(productId: string) {
 }
 
 export function formatPrice(product: Product) {
+  if (product.sold && product.giveaway) return "Claimed";
   if (product.sold) return "Sold";
   if (product.reserved) {
     const base = `$${product.price}`;

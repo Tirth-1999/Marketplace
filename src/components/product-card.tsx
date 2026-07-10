@@ -52,7 +52,7 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="flex flex-wrap gap-1">
             {product.sold && (
               <Badge variant="destructive" className="text-[10px] sm:text-xs">
-                Sold
+                {product.giveaway ? "Claimed" : "Sold"}
               </Badge>
             )}
             {product.reserved && !product.sold && (
@@ -60,7 +60,7 @@ export function ProductCard({ product }: { product: Product }) {
                 Reserved
               </Badge>
             )}
-            {product.giveaway && (
+            {product.giveaway && !product.sold && (
               <Badge variant="secondary" className="text-[10px] sm:text-xs">
                 Giveaway
               </Badge>
