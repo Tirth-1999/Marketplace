@@ -134,27 +134,6 @@ function FilterPanel({
     <div className="space-y-6">
       <div className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Category
-        </p>
-        <div className="flex flex-col gap-1">
-          {categories.map((item) => (
-            <Button
-              key={item}
-              variant={category === item ? "secondary" : "ghost"}
-              className="h-11 min-h-11 w-full justify-start px-3 text-base"
-              onClick={() => {
-                setCategory(item);
-                onPick?.();
-              }}
-            >
-              {item}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Deal type
         </p>
         <div className="flex flex-col gap-1">
@@ -169,6 +148,27 @@ function FilterPanel({
               }}
             >
               {item.label}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Category
+        </p>
+        <div className="flex flex-col gap-1">
+          {categories.map((item) => (
+            <Button
+              key={item}
+              variant={category === item ? "secondary" : "ghost"}
+              className="h-11 min-h-11 w-full justify-start px-3 text-base"
+              onClick={() => {
+                setCategory(item);
+                onPick?.();
+              }}
+            >
+              {item}
             </Button>
           ))}
         </div>
