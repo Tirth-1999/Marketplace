@@ -1,5 +1,12 @@
 export type GalleryAspect = "square" | "portrait" | "landscape" | "tall";
 
+export type Seller = {
+  name: string;
+  firstName: string;
+  phoneDisplay: string;
+  phoneE164: string;
+};
+
 export type MediaItem = {
   type: "image" | "video";
   src: string;
@@ -25,7 +32,25 @@ export type Product = {
   images: string[];
   /** Optional videos shown in the gallery (drop files under public/products/...). */
   videos?: string[];
+  /** Who to contact for this listing. Defaults to the marketplace owner. */
+  seller?: Seller;
 };
+
+
+export const SELLERS = {
+  gautam: {
+    name: "Gautam M",
+    firstName: "Gautam",
+    phoneDisplay: "+91 84463 34591",
+    phoneE164: "918446334591",
+  },
+  srinaini: {
+    name: "srinaini",
+    firstName: "srinaini",
+    phoneDisplay: "(979) 739-8910",
+    phoneE164: "19797398910",
+  },
+} satisfies Record<string, Seller>;
 
 
 const aspectClass: Record<GalleryAspect, string> = {
@@ -650,6 +675,62 @@ export const products: Product[] = [
       "/products/notebooks/notebooks-02.jpeg",
       "/products/notebooks/notebooks-03.jpeg",
     ],
+  },
+  {
+    id: "razer-blackwidow-v2",
+    title: "Razer BlackWidow V2 with Wrist Rest",
+    price: 50,
+    description:
+      "Razer BlackWidow V2 mechanical gaming keyboard with included wrist rest. Full-size layout with dedicated media controls and volume dial. Listed by Gautam M.",
+    specs: [
+      "Brand / Model: Razer BlackWidow V2",
+      "Includes wrist rest",
+      "Gaming keyboard",
+      "Price: $50 — negotiable",
+    ],
+    category: "Electronics",
+    negotiable: true,
+    seller: SELLERS.gautam,
+    galleryAspect: "landscape",
+    images: ["/products/razer-blackwidow-v2/razer-blackwidow-v2-01.png"],
+  },
+  {
+    id: "tamu-graduation-regalia",
+    title: "Texas A&M Graduation Regalia",
+    price: 90,
+    description:
+      "Texas A&M / ATM graduation regalia set. Full formal graduation outfit for pickup in College Station — message the seller for details on what's included and condition.",
+    specs: [
+      "Texas A&M / ATM regalia",
+      "Price: $90 — negotiable",
+      "Listed by srinaini",
+    ],
+    category: "Graduation",
+    negotiable: true,
+    seller: SELLERS.srinaini,
+    galleryAspect: "portrait",
+    images: [
+      "/products/graduation-gown/graduation-gown-01.jpeg",
+      "/products/graduation-gown/graduation-gown-02.jpeg",
+    ],
+  },
+  {
+    id: "halloween-costume-sword",
+    title: "Halloween Costume Jacket + Sword",
+    price: 20,
+    priceNote: "Non-negotiable",
+    description:
+      "Circus-style Halloween costume jacket (adult L/XL, fits up to size 46) plus sword. Jacket is new in packaging. Listed by Gautam M.",
+    specs: [
+      "Costume jacket + sword",
+      "Jacket: adult L/XL (fits up to size 46)",
+      "Price: $20 (non-negotiable)",
+    ],
+    category: "Costume",
+    negotiable: false,
+    seller: SELLERS.gautam,
+    galleryAspect: "portrait",
+    images: ["/products/halloween-costume-sword/halloween-costume-sword-01.png"],
   },
 ];
 

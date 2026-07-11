@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { WhatsAppIcon } from "@/components/whatsapp-icon";
-import { CONTACT, whatsappUrl } from "@/lib/contact";
 
 export function SiteHeader() {
   return (
@@ -29,22 +27,6 @@ export function SiteHeader() {
             nativeButton={false}
           >
             Contact
-          </Button>
-          <Button
-            className="h-11 min-h-11 min-w-11 bg-[#25D366] px-2.5 text-sm font-medium text-white hover:bg-[#1ebe57] hover:text-white sm:px-3 sm:text-base"
-            render={
-              <a
-                href={whatsappUrl(
-                  `Hi ${CONTACT.name}, I saw your marketplace and want to ask about an item.`
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-              />
-            }
-            nativeButton={false}
-          >
-            <WhatsAppIcon className="size-5" />
-            <span className="hidden sm:inline">WhatsApp</span>
           </Button>
         </nav>
       </div>

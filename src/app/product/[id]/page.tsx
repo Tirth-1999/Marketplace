@@ -10,7 +10,7 @@ import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { CONTACT, productWhatsAppMessage, whatsappUrl } from "@/lib/contact";
+import { CONTACT, getProductSeller, productWhatsAppUrl } from "@/lib/contact";
 import { getExistingProductMedia } from "@/lib/product-media";
 import { formatPrice, getProduct, isReserved, isSold, products } from "@/lib/products";
 
@@ -37,7 +37,8 @@ export default async function ProductPage({ params }: PageProps) {
   const product = getProduct(id);
   if (!product) notFound();
 
-  const message = productWhatsAppMessage(product);
+  const seller = getProductSeller(product);
+  const whatsappHref = productWhatsAppUrl(product);
   const media = getExistingProductMedia(product);
   const sold = isSold(product);
   const reserved = isReserved(product);
@@ -172,13 +173,11 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
 
             <div className="hidden space-y-4 rounded-xl border bg-muted/40 p-4 sm:p-5 md:block">
-              <h2 className="text-lg font-semibold sm:text-xl">Contact me</h2>
+              <h2 className="text-lg font-semibold sm:text-xl">Contact seller</h2>
               <p className="text-sm text-muted-foreground sm:text-base lg:text-lg">
-                {CONTACT.name}
+                {seller.name}
                 <br />
-                WhatsApp / call: {CONTACT.phoneDisplay}
-                <br />
-                {CONTACT.responseNote}
+                WhatsApp / call: {seller.phoneDisplay}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 {!sold && !reserved && (
@@ -186,7 +185,7 @@ export default async function ProductPage({ params }: PageProps) {
                     className="h-11 min-h-11 flex-1 bg-[#25D366] text-base text-white hover:bg-[#1ebe57] hover:text-white"
                     render={
                       <a
-                        href={whatsappUrl(message)}
+                        href={whatsappHref}
                         target="_blank"
                         rel="noopener noreferrer"
                       />
@@ -202,7 +201,7 @@ export default async function ProductPage({ params }: PageProps) {
                     className="h-11 min-h-11 flex-1 bg-[#25D366] text-base text-white hover:bg-[#1ebe57] hover:text-white"
                     render={
                       <a
-                        href={whatsappUrl(message)}
+                        href={whatsappHref}
                         target="_blank"
                         rel="noopener noreferrer"
                       />
@@ -216,7 +215,7 @@ export default async function ProductPage({ params }: PageProps) {
                 <Button
                   variant="outline"
                   className="h-11 min-h-11 flex-1 text-base"
-                  render={<a href={`tel:+${CONTACT.phoneE164}`} />}
+                  render={<a href={`tel:+${seller.phoneE164}`} />}
                   nativeButton={false}
                 >
                   <Phone className="size-5" />
@@ -237,7 +236,7 @@ export default async function ProductPage({ params }: PageProps) {
             className="h-11 min-h-11 flex-1 bg-[#25D366] text-sm text-white hover:bg-[#1ebe57] hover:text-white sm:text-base"
             render={
               <a
-                href={whatsappUrl(message)}
+                href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
               />
@@ -255,7 +254,7 @@ export default async function ProductPage({ params }: PageProps) {
           <Button
             variant="outline"
             className="h-11 min-h-11 min-w-11 px-4 text-sm sm:text-base"
-            render={<a href={`tel:+${CONTACT.phoneE164}`} />}
+            render={<a href={`tel:+${seller.phoneE164}`} />}
             nativeButton={false}
           >
             <Phone className="size-5" />

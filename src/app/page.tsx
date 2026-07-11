@@ -13,10 +13,9 @@ export default function HomePage() {
             Items for sale
           </h1>
           <p className="w-full text-sm text-muted-foreground sm:text-base lg:text-lg">
-            Browse photos, check the price, then message me on WhatsApp. Pickup
-            only in {CONTACT.pickup.city} ({CONTACT.pickup.address}) — come pick
-            up at my place. {products.length} items listed.{" "}
-            {CONTACT.responseNote}
+            Browse photos, check the price, then message the seller on WhatsApp
+            from each item page. Pickup in {CONTACT.pickup.city} —{" "}
+            {products.length} items listed.
           </p>
         </div>
         <ProductGrid />
