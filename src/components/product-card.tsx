@@ -12,6 +12,16 @@ function listedByName(firstName: string) {
   return firstName.charAt(0).toUpperCase() + firstName.slice(1);
 }
 
+const SELLER_HIGHLIGHT: Record<string, string> = {
+  "19796352045": "bg-sky-100 text-sky-800",
+  "918446334591": "bg-emerald-100 text-emerald-800",
+  "19797398910": "bg-violet-100 text-violet-800",
+};
+
+function sellerHighlightClass(phoneE164: string) {
+  return SELLER_HIGHLIGHT[phoneE164] ?? "bg-muted text-foreground";
+}
+
 export function ProductCard({ product }: { product: Product }) {
   const sold = isSold(product);
   const reserved = isReserved(product);
@@ -104,7 +114,15 @@ export function ProductCard({ product }: { product: Product }) {
             {formatPrice(product)}
           </p>
           <p className="text-[10px] text-muted-foreground sm:text-xs">
-            Listed by {listedByName(seller.firstName)}
+            Listed by{" "}
+            <span
+              className={cn(
+                "rounded px-1 py-0.5 font-semibold",
+                sellerHighlightClass(seller.phoneE164)
+              )}
+            >
+              {listedByName(seller.firstName)}
+            </span>
           </p>
         </CardContent>
       </Card>
