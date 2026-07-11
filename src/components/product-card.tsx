@@ -4,12 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { getProductSeller } from "@/lib/contact";
 import { cn } from "@/lib/utils";
 import { formatPrice, isReserved, isSold, type Product } from "@/lib/products";
+
+function listedByName(firstName: string) {
+  return firstName.charAt(0).toUpperCase() + firstName.slice(1);
+}
 
 export function ProductCard({ product }: { product: Product }) {
   const sold = isSold(product);
   const reserved = isReserved(product);
+  const seller = getProductSeller(product);
 
   return (
     <Link
@@ -96,6 +102,9 @@ export function ProductCard({ product }: { product: Product }) {
           </h2>
           <p className="text-base font-bold tabular-nums sm:text-lg lg:text-xl">
             {formatPrice(product)}
+          </p>
+          <p className="text-[10px] text-muted-foreground sm:text-xs">
+            Listed by {listedByName(seller.firstName)}
           </p>
         </CardContent>
       </Card>
