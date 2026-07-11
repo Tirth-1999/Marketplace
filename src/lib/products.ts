@@ -119,23 +119,23 @@ export const products: Product[] = [
   },
   {
     id: "graduation-gown",
-    title: "Graduation Cap & Gown Set",
-    price: 70,
+    title: "Graduation Regalia Hood",
+    price: 15,
     description:
-      "Texas A&M / ATM graduation set: black gown with maroon cuffs, academic hood, graduation mortarboard (cap), and tassel. Full formal graduation outfit — gown, hood, mortarboard, cuffs, and tassel.",
+      "Texas A&M / ATM academic regalia hood only. Gown and graduation mortarboard (cap) have already been sold separately — this listing is just the hood.",
     specs: [
-      "Includes: gown, hood, graduation mortarboard (cap), cuffs, tassel",
-      "Price: $70",
-      "Add A&M sun/swag cap + poncho for $10 more — see the $80 Graduation + Swag Combo",
+      "Hood only — gown and cap sold separately",
+      "Texas A&M / ATM regalia",
+      "Price: $15 — negotiable",
     ],
     category: "Graduation",
     negotiable: true,
     galleryAspect: "portrait",
     images: [
-      "/products/graduation-gown/graduation-gown-01.jpeg",
-      "/products/graduation-gown/graduation-gown-02.jpeg",
       "/products/graduation-set/graduation-set-04.jpeg",
       "/products/graduation-set/graduation-set-05.jpeg",
+      "/products/graduation-gown/graduation-gown-01.jpeg",
+      "/products/graduation-gown/graduation-gown-02.jpeg",
     ],
   },
   {
@@ -155,7 +155,7 @@ export const products: Product[] = [
     category: "Graduation",
     negotiable: true,
     combo: true,
-    includes: ["graduation-gown"],
+    sold: true,
     galleryAspect: "portrait",
     images: [
       "/products/graduation-set/graduation-set-01.jpeg",
@@ -179,6 +179,7 @@ export const products: Product[] = [
     ],
     category: "Electronics",
     negotiable: false,
+    sold: true,
     galleryAspect: "landscape",
     videos: ["/products/desktop/desktop-video.mp4"],
     images: [
@@ -220,21 +221,21 @@ export const products: Product[] = [
   },
   {
     id: "keyboard-mouse-combo",
-    title: "Keyboard + Mouse + Keyboard Mat Combo",
+    title: "Keyboard + Mouse Combo",
     price: 20,
-    priceNote: "Combo",
+    priceNote: "Combo · mat free",
     description:
-      "Seenda wireless keyboard, matching mouse, and keyboard/desk mat as a set. Better deal than buying each piece alone ($18 + $5 + $1 = $24).",
+      "Seenda wireless keyboard and matching mouse as a set. Keyboard mat included free with the keyboard — $20 for keyboard + mouse, mat on the house.",
     specs: [
-      "Combo: $20",
-      "Keyboard alone: $18",
+      "Combo: $20 (keyboard + mouse)",
+      "Keyboard mat included free",
+      "Keyboard alone: $18 (mat also free)",
       "Mouse alone: $5 (non-negotiable)",
-      "Mat alone: $1 (non-negotiable)",
     ],
     category: "Electronics",
     negotiable: true,
     combo: true,
-    includes: ["keyboard", "mouse", "keyboard-mat"],
+    includes: ["keyboard", "mouse"],
     galleryAspect: "landscape",
     images: [
       "/products/keyboard-mouse-combo/keyboard-mouse-combo-01.jpeg",
@@ -249,13 +250,15 @@ export const products: Product[] = [
     id: "keyboard",
     title: "Seenda Wireless Keyboard",
     price: 18,
+    priceNote: "Mat free",
     description:
-      "Full-size Seenda wireless Bluetooth keyboard with multi-device switching and silicone cover. Quiet low-profile keys. Also available in the $20 keyboard + mouse + mat combo.",
+      "Full-size Seenda wireless Bluetooth keyboard with multi-device switching and silicone cover. Quiet low-profile keys. Keyboard mat included free with purchase.",
     specs: [
       "Brand: Seenda",
       "Wireless / multi-device",
       "Includes silicone cover",
-      "Also in $20 combo with mouse + mat",
+      "Keyboard mat included free",
+      "Also in $20 keyboard + mouse combo (mat free)",
     ],
     category: "Electronics",
     negotiable: true,
@@ -273,11 +276,11 @@ export const products: Product[] = [
     price: 5,
     priceNote: "Non-negotiable",
     description:
-      "Seenda SKM64-2 wireless Bluetooth mouse with multi-device pairing and DPI switch. Slim optical design. Also included in the keyboard combo.",
+      "Seenda SKM64-2 wireless Bluetooth mouse with multi-device pairing and DPI switch. Slim optical design. Sold separately at $5 (firm). Pair with the keyboard for the $20 combo — mat free with keyboard.",
     specs: [
       "Model: Seenda SKM64-2",
       "Price: $5 (non-negotiable)",
-      "Also in $20 keyboard combo",
+      "Also in $20 keyboard + mouse combo",
     ],
     category: "Electronics",
     negotiable: false,
@@ -293,10 +296,10 @@ export const products: Product[] = [
     price: 1,
     priceNote: "Non-negotiable",
     description:
-      "Desk keyboard mat for a cleaner typing surface. Sold alone for $1 (firm), or as part of the $20 keyboard + mouse + mat combo.",
+      "Desk keyboard mat for a cleaner typing surface. Free with any keyboard purchase — $1 only if bought on its own.",
     specs: [
+      "Free with keyboard purchase",
       "Alone: $1 (non-negotiable / firm)",
-      "In combo: included in $20 set",
     ],
     category: "Electronics",
     negotiable: false,
@@ -541,6 +544,7 @@ export const products: Product[] = [
     category: "Shoes",
     negotiable: true,
     brandNew: true,
+    reserved: true,
     galleryAspect: "square",
     images: [
       "/products/shoe-cups/shoe-cups-01.jpeg",
@@ -696,35 +700,25 @@ export const BUNDLE_PROMPTS: Record<
     headline: "Just need the chair?",
     body: "Chair alone is listed at $25 (firm).",
   },
-  "graduation-gown": {
-    targetId: "graduation-set",
-    headline: "Add A&M swag for $10 more",
-    body: "Gown set + A&M sun/swag cap + poncho for $80.",
-  },
-  "graduation-set": {
-    targetId: "graduation-gown",
-    headline: "Gown set without swag",
-    body: "Cap, gown, hood, and tassel alone for $70.",
-  },
   keyboard: {
     targetId: "keyboard-mouse-combo",
-    headline: "Keyboard + mouse + mat combo",
-    body: "Full set for $20 (pieces alone add up to $24).",
+    headline: "Add the mouse — mat still free",
+    body: "Keyboard + mouse for $20. Mat included free with the keyboard.",
   },
   mouse: {
     targetId: "keyboard-mouse-combo",
     headline: "Get the full desk set",
-    body: "Keyboard + mouse + mat combo for $20.",
+    body: "Keyboard + mouse for $20 — mat free with the keyboard.",
   },
   "keyboard-mat": {
-    targetId: "keyboard-mouse-combo",
-    headline: "Included in the $20 combo",
-    body: "Keyboard + mouse + mat together for $20.",
+    targetId: "keyboard",
+    headline: "Free with the keyboard",
+    body: "Buy the keyboard ($18) and the mat is included at no extra cost.",
   },
   "keyboard-mouse-combo": {
     targetId: "keyboard",
     headline: "Prefer pieces separately?",
-    body: "Keyboard $18 · Mouse $5 · Mat $1 also listed alone.",
+    body: "Keyboard $18 (mat free) · Mouse $5 (firm) · Mat $1 alone.",
   },
 };
 
