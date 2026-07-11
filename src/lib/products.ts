@@ -305,6 +305,7 @@ export const products: Product[] = [
     ],
     category: "Electronics",
     negotiable: false,
+    sold: true,
     galleryAspect: "landscape",
     images: ["/products/keyboard-mat/keyboard-mat-01.jpeg"],
   },
