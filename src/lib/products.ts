@@ -210,6 +210,7 @@ export const products: Product[] = [
     category: "Shoes",
     negotiable: true,
     brandNew: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/nike-initiator/nike-initiator-01.jpeg",
@@ -262,6 +263,7 @@ export const products: Product[] = [
     ],
     category: "Electronics",
     negotiable: true,
+    sold: true,
     galleryAspect: "landscape",
     images: [
       "/products/keyboard/keyboard-01.jpeg",
@@ -315,6 +317,7 @@ export const products: Product[] = [
     specs: ["Brand: Sony", "Portable with carry strap", "Price: $15 — negotiable"],
     category: "Electronics",
     negotiable: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/sony-speaker/sony-speaker-01.jpeg",
@@ -374,6 +377,7 @@ export const products: Product[] = [
     ],
     category: "Shoes",
     negotiable: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/badminton-shoes/badminton-shoes-01.jpeg",
@@ -484,6 +488,7 @@ export const products: Product[] = [
     specs: ["Foldable blue mat", "Price: $5 (non-negotiable)"],
     category: "Fitness",
     negotiable: false,
+    sold: true,
     galleryAspect: "landscape",
     images: [
       "/products/yoga-mat/yoga-mat-01.jpeg",
@@ -544,7 +549,7 @@ export const products: Product[] = [
     category: "Shoes",
     negotiable: true,
     brandNew: true,
-    reserved: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/shoe-cups/shoe-cups-01.jpeg",
@@ -582,6 +587,7 @@ export const products: Product[] = [
     specs: ["Silicone face ice mold", "Price: $3 — negotiable"],
     category: "Personal Care",
     negotiable: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/face-ice-mold/face-ice-mold-01.jpeg",
