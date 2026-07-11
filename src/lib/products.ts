@@ -334,6 +334,7 @@ export const products: Product[] = [
     specs: ["Brand: Sony", "Neckband wireless", "Price: $5 (non-negotiable)"],
     category: "Electronics",
     negotiable: false,
+    sold: true,
     galleryAspect: "landscape",
     images: [
       "/products/sony-earphones/sony-earphones-01.jpeg",
