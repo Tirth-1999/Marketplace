@@ -131,6 +131,7 @@ export const products: Product[] = [
     negotiable: true,
     combo: true,
     includes: ["chair", "back-rest-cushion"],
+    sold: true,
     galleryAspect: "portrait",
     videos: ["/products/chair/chair-video.mp4"],
     images: [
@@ -155,6 +156,7 @@ export const products: Product[] = [
     ],
     category: "Graduation",
     negotiable: true,
+    sold: true,
     galleryAspect: "portrait",
     images: [
       "/products/graduation-set/graduation-set-04.jpeg",
@@ -262,6 +264,7 @@ export const products: Product[] = [
     negotiable: true,
     combo: true,
     includes: ["keyboard", "mouse"],
+    sold: true,
     galleryAspect: "landscape",
     images: [
       "/products/keyboard-mouse-combo/keyboard-mouse-combo-01.jpeg",
@@ -311,6 +314,7 @@ export const products: Product[] = [
     ],
     category: "Electronics",
     negotiable: false,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/mouse/mouse-01.jpeg",
@@ -381,6 +385,7 @@ export const products: Product[] = [
     ],
     category: "Home",
     negotiable: true,
+    sold: true,
     galleryAspect: "portrait",
     images: [
       "/products/desk-lamp/desk-lamp-01.jpeg",
@@ -427,6 +432,7 @@ export const products: Product[] = [
     ],
     category: "Fitness",
     negotiable: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/gym-bottle/gym-bottle-01.jpeg",
@@ -465,6 +471,7 @@ export const products: Product[] = [
     specs: ["Brand: Office Depot", "3-ring binder + sheet protectors", "Price: $5 (firm)"],
     category: "Stationery",
     negotiable: false,
+    sold: true,
     galleryAspect: "portrait",
     images: [
       "/products/office-folder/office-folder-01.jpeg",
@@ -484,6 +491,7 @@ export const products: Product[] = [
     category: "Home",
     negotiable: true,
     brandNew: true,
+    sold: true,
     galleryAspect: "square",
     images: ["/products/iron-board-cover/iron-board-cover-01.jpeg"],
   },
@@ -598,6 +606,7 @@ export const products: Product[] = [
     ],
     category: "Home",
     negotiable: true,
+    sold: true,
     galleryAspect: "portrait",
     images: [
       "/products/clothes-hangers/clothes-hangers-01.jpeg",
@@ -630,6 +639,7 @@ export const products: Product[] = [
     specs: ["Holder + pens/pencils included", "A&M fan / stationery extras", "Price: $5 — negotiable"],
     category: "Stationery",
     negotiable: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/pencil-holder/pencil-holder-01.jpeg",
@@ -651,6 +661,7 @@ export const products: Product[] = [
     ],
     category: "Electronics",
     negotiable: true,
+    sold: true,
     galleryAspect: "square",
     images: [
       "/products/wireless-charger/wireless-charger-01.jpeg",
