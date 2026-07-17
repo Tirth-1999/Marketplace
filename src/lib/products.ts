@@ -858,6 +858,23 @@ export const products: Product[] = [
     galleryAspect: "landscape",
     images: ["/products/pickleball-paddles/pickleball-paddles-01.jpeg"],
   },
+  {
+    id: "tennis-balls",
+    title: "Tennis Balls (14)",
+    price: 10,
+    description:
+      "Lot of 14 tennis balls in mixed neon yellow/lime green — includes Wilson Open 3 and others. Some wear from use. Listed by Gautam M.",
+    specs: [
+      "14 tennis balls",
+      "Mixed brands / condition",
+      "Price: $10 — negotiable",
+    ],
+    category: "Fitness",
+    negotiable: true,
+    seller: SELLERS.gautam,
+    galleryAspect: "landscape",
+    images: ["/products/tennis-balls/tennis-balls-01.jpeg"],
+  },
 ];
 
 export function getProduct(id: string) {
