@@ -840,6 +840,24 @@ export const products: Product[] = [
     galleryAspect: "landscape",
     images: ["/products/monitor-damaged/monitor-damaged-01.png"],
   },
+  {
+    id: "pickleball-paddles",
+    title: "Pickleball Paddles (Set of 3)",
+    price: 10,
+    description:
+      "Set of three wooden pickleball paddles with matching geometric patterns (cream, peach, and teal). Grip tape on two handles is loose/unraveling; one is neatly wrapped. Listed by Gautam M.",
+    specs: [
+      "Set of 3 paddles",
+      "Geometric patterned faces",
+      "Some grip tape wear on 2 handles",
+      "Price: $10 — negotiable",
+    ],
+    category: "Fitness",
+    negotiable: true,
+    seller: SELLERS.gautam,
+    galleryAspect: "landscape",
+    images: ["/products/pickleball-paddles/pickleball-paddles-01.jpeg"],
+  },
 ];
 
 export function getProduct(id: string) {
